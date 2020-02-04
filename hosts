@@ -1,0 +1,9 @@
+
+[nodes]
+linux0 ansible_host=35.158.84.161
+linux1 ansible_host=18.185.0.142 
+
+[nodes:vars]
+ansible_ssh_private_key_file=/Users/shew/.ssh/bananas.pem
+ansible_user=ubuntu
+
