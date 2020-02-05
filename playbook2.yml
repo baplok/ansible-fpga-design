@@ -1,0 +1,12 @@
+---
+- name: Install octave
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Install octave
+    apt: name=octave state=latest install_recommends=yes update_cache=yes
+
+  - name: Check octave version
+    shell: cmd="octave --version"
+
