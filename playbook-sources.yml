@@ -1,0 +1,25 @@
+---
+- name: Update sources list
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Ping my servers
+    ping:
+
+  - name: Copy file with owner and permissions
+    copy:
+      src: sources.list
+      dest: /etc/apt/sources.list
+      owner: root
+      group: root
+      mode: u=rw,g=r,o=r
+
+  - name: update profile.d
+    copy:
+      src: set_proxy.sh
+      dest: /etc/profile.d/set_proxy.sh
+      owner: root
+      group: root
+      mode: u=rw,g=r,o=r
+
