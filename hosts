@@ -1,5 +1,5 @@
 
 [nodes]
-linux0 ansible_host=35.158.84.161
+linux0 ansible_host=35.158.221.81
 linux1 ansible_host=18.185.0.142
 
