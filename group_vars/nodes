@@ -1,4 +1,3 @@
 ---
-ansible_ssh_private_key_file : /Users/shew/.ssh/bananas.pem
-ansible_user                 : ubuntu
+ansible_user                 : tscadmin
 
