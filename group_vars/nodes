@@ -1,3 +1,4 @@
 ---
-ansible_user                 : tscadmin
+ansible_user                 : tcsadmin
+ansible_ssh_private_key_file : /Users/shew/.ssh/tcsadmin
 
