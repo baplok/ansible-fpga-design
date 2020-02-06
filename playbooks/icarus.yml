@@ -5,19 +5,16 @@
 
   tasks:
   - apt_repository:
-      repo: ppa:team-electronics/ppa
-      state: present
-      filename: icarus_verilog
+      repo: "ppa:team-electronics/ppa"
+    become: yes
+    environment:
+      HTTPS_PROXY: "{{ proxy_env }}"
+      HTTP_PROXY: "{{ proxy_env }}"
+      APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
 
   - name: Install icarus
     apt: name=verilog state=latest install_recommends=yes update_cache=yes
-    environment:
-      HTTP_PROXY: {{ proxy_env }}
-      HTTPS_PROXY: {{ proxy_env  }}
 
   - name: Install GTK wave
     apt: name=gtkwave state=latest install_recommends=yes update_cache=yes
-    environment:
-      HTTP_PROXY: {{ proxy_env }}
-      HTTPS_PROXY: {{ proxy_env  }}
 
