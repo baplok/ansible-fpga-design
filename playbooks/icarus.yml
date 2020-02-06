@@ -11,7 +11,13 @@
 
   - name: Install icarus
     apt: name=verilog state=latest install_recommends=yes update_cache=yes
+    environment:
+      HTTP_PROXY: {{ proxy_env }}
+      HTTPS_PROXY: {{ proxy_env  }}
 
   - name: Install GTK wave
     apt: name=gtkwave state=latest install_recommends=yes update_cache=yes
+    environment:
+      HTTP_PROXY: {{ proxy_env }}
+      HTTPS_PROXY: {{ proxy_env  }}
 
