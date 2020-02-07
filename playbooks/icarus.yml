@@ -8,8 +8,6 @@
       repo: "ppa:team-electronics/ppa"
     become: yes
     environment:
-      HTTPS_PROXY: "{{ proxy_env }}"
-      HTTP_PROXY: "{{ proxy_env }}"
       APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
 
   - name: Install icarus

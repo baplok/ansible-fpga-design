@@ -10,14 +10,14 @@
   - name: Install req
     apt: name=gnome-software-plugin-flatpak state=latest install_recommends=yes update_cache=yes
 
-  - name: Add the flathub flatpak repository remote to the user installation
+  - name: Add the flathub flatpak repository remote to the system installation
     flatpak_remote:
       name: flathub
       state: present
       flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
       method: system
 
-  - name: Install the gedit package from flathub for current user
+  - name: Install the Octave package from flathub globally
     flatpak:
       name: org.octave.Octave
       state: present
