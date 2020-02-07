@@ -18,3 +18,9 @@ ansible_ssh_private_key_file : ~/.ssh/my-key.pem
 
 Put all relevant data to `group_vars/nodes/vault.yml` and encrypt it
 
+```
+vault_ansible_sudo_pass : sudo-password
+vault_proxy_username    : proxy-username
+vault_proxy_password    : proxy-password
+```
+
