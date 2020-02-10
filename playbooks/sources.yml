@@ -38,4 +38,10 @@
     with_items:
       - htop
       - neovim
+      - curl
+
+  - name: Create student user
+    user:
+      name: "{{ student_username }}"
+      password: "{{ student_password }}"
 

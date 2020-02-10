@@ -7,3 +7,6 @@ proxy_username               : "{{ vault_proxy_username }}"
 proxy_password               : "{{ vault_proxy_password }}"
 proxy_env                    : "http://{{ proxy_username }}:{{ proxy_password }}@proxy.miet.ru:8080"
 
+student_username             : student
+student_password             : "{{ vault_student_password | password_hash('sha512') }}"
+

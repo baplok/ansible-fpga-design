@@ -1,0 +1,24 @@
+---
+- name: Install gnuradio
+  hosts: all
+  become: yes
+
+  tasks:
+  - apt_repository:
+      repo: "ppa:gnuradio/gnuradio-releases"
+    become: yes
+    environment:
+      APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
+
+  - name: Install gnuradio
+    apt: name=gnuradio state=latest install_recommends=yes update_cache=yes
+
+  - name: Install uhd
+    apt:
+      name:
+        - libuhd-dev
+        - uhd-host
+      state: latest
+      install_recommends: yes
+      update_cache: yes
+

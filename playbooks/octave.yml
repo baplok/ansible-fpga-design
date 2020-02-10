@@ -4,25 +4,12 @@
   become: yes
 
   tasks:
-  - name: Install flatpak
-    apt: name=flatpak state=latest install_recommends=yes update_cache=yes
+  - apt_repository:
+      repo: "ppa:gapost/octave"
+    become: yes
+    environment:
+      APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
 
-  - name: Install req
-    apt: name=gnome-software-plugin-flatpak state=latest install_recommends=yes update_cache=yes
-
-  - name: Add the flathub flatpak repository remote to the system installation
-    flatpak_remote:
-      name: flathub
-      state: present
-      flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
-      method: system
-
-  - name: Install the Octave package from flathub globally
-    flatpak:
-      name: org.octave.Octave
-      state: present
-      method: system
-
-  - name: Check octave version
-    shell: cmd="octave --version"
+  - name: Install octave
+    apt: name=octave state=latest install_recommends=yes update_cache=yes
 
