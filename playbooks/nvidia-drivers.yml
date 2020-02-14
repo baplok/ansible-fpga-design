@@ -1,0 +1,16 @@
+---
+- name: Install nvidia drivers
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Install drivers
+    apt:
+      name: nvidia-driver-390
+      state: latest
+      install_recommends: yes
+      update_cache: yes
+
+  - name: Unconditionally reboot the machine with all defaults
+    reboot:
+
