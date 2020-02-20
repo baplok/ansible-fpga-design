@@ -10,3 +10,8 @@ proxy_env                    : "http://{{ proxy_username }}:{{ proxy_password }}
 student_username             : student
 student_password             : "{{ vault_student_password | password_hash('sha512') }}"
 
+admin_username               : tcsadmin
+admin_password               : "{{ vault_admin_password | password_hash('sha512') }}"
+
+private_username             : private
+
