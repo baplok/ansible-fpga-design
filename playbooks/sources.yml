@@ -45,6 +45,8 @@
       - htop
       - neovim
       - curl
+      - git
+      - cmake
 
   - name: Create student user
     user:
