@@ -1,0 +1,67 @@
+---
+- name: Install debs required by Xilinx 
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Install cable drivers from installed Xilinx ISE
+    become: yes
+    shell: ./install_drivers
+    args:
+      chdir: /opt/Xilinx/14.7/ISE_DS/ISE/bin/lin64/install_script/install_drivers
+
+  - name: Install digilent cable drivers from installed Xilinx ISE
+    become: yes
+    shell: |
+        ./install_digilent.sh
+
+        expect "In which directory should system binaries be installed?"
+        send "\n"
+
+        expect "In which directory should system binaries be installed?"
+        send "\n"
+
+        expect "In which directory should data files be installed?"
+        send "\n"
+
+        expect "In which directory should libraries be installed?"
+        send "\n"
+
+        expect "In which directory should plugins be installed?"
+        send "\n"
+
+        args:
+          chdir: /opt/Xilinx/14.7/ISE_DS/ISE/bin/lin64/digilent
+
+  - name: Install debs...
+    become: yes
+    apt:
+      pkg:
+        - libxm4
+        - gitk
+        - git-gui
+        - libusb-dev
+        - build-essential
+        - libc6-dev-i386
+        - fxload
+        - libftdi-dev
+      state: latest
+      install_recommends: yes
+      update_cache: yes
+
+  - name: Clonning usb-driver...
+    become: yes
+    shell: git clone git://git.zerfleddert.de/usb-driver
+    args:
+      chdir: /opt/Xilinx/14.7
+      creates: /opt/Xilinx/14.7/usb-driver
+
+  - name: Build and install usb-driver...
+    become: yes
+    shell: 
+      git pull
+      make clean
+      make
+      ./setup_pcusb /opt/Xilinx/14.7/ISE_DS/ISE/
+
+
