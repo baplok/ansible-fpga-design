@@ -11,5 +11,18 @@
       APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
 
   - name: Install octave
-    apt: name=octave state=latest install_recommends=yes update_cache=yes
+    apt:
+      pkg:
+        - octave
+        - liboctave-dev
+      state: latest
+      install_recommends: yes 
+      update_cache: yes
 
+  - name: Install neccessry octave packages from forge globally 
+    shell: octave-cli --eval 'pkg install -forge -global signal communications control'
+    args:
+      creates:
+        - /usr/share/octave/packages/communications-1.2.2
+        - /usr/share/octave/packages/control-3.2.0
+        - /usr/share/octave/packages/signal-1.4.1
