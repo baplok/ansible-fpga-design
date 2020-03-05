@@ -1,0 +1,13 @@
+- hosts: all
+  remote_user: tscadmin
+  sudo: yes
+
+  tasks:
+    - name: Ensure NFS common is installed.
+      apt: name=nfs-common state=installed update_cache=yes
+
+    - name: Create mountable dir
+      file: path=/opt/Xilinx state=directory mode=755 owner=root group=root
+
+    - name: set mountpoints
+      mount: name=/opt/Xilinx src=xilinx.sipc.miet.ru:/opt/Xilinx fstype=nfs opts=ro,defaults dump=0 passno=2 state=mounted
