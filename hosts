@@ -30,4 +30,5 @@ st4231b-27 ansible_host=172.20.42.61
 st4231b-28 ansible_host=172.20.42.82
 st4231b-29 ansible_host=172.20.42.63
 st4231b-30 ansible_host=172.20.42.66
+teacher4231b ansible_host=172.20.42.76
 
