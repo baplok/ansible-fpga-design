@@ -1,10 +1,10 @@
 ---
-- name: Install debs required by Xilinx 
+- name: Install Xilinx cable drivers...
   hosts: all
   become: yes
   tasks:
 
-  - name: Install debs...
+  - name: Install required debs...
     become: yes
     apt:
       pkg:
