@@ -50,5 +50,7 @@ map     passwd  homeDirectory      "/home/SIPCMIETRU/$sAMAccountName"
 map     passwd  loginShell         "/bin/bash"
 
 map     group   gidNumber          objectSid:{{ ldap_sid }}
+map     group   cn                 sAMAccountName
+
 map     shadow  uid                sAMAccountName
 map     shadow  shadowLastChange   pwdLastSet

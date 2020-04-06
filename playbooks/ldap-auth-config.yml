@@ -63,3 +63,14 @@
           [SeatDefaults]
           greeter-show-manual-login=true
 
+
+  - name: Restart service nscld...
+    service:
+      name: nslcd
+      state: restarted
+
+  - name: Restart service nscd...
+    service:
+      name: nscd
+      state: restarted
+
