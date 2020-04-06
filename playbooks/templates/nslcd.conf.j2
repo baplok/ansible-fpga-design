@@ -1,0 +1,54 @@
+# /etc/nslcd.conf
+# nslcd configuration file. See nslcd.conf(5)
+# for details.
+
+# The user and group nslcd should run as.
+uid nslcd
+gid nslcd
+
+# The location at which the LDAP server(s) should be reachable.
+uri ldaps://moon.sipc.miet.ru/
+uri ldaps://vega.sipc.miet.ru/
+uri ldaps://darkmoon.sipc.miet.ru/
+
+# The search base that will be used for all queries.
+base {{ ldap_base_dn }}
+
+# The LDAP protocol version to use.
+ldap_version 3
+
+# The DN to bind with for normal lookups.
+binddn {{ ldap_user_bind_dn }}
+bindpw {{ ldap_pass_bind_dn }}
+
+# The DN used for password modifications by root.
+#rootpwmoddn cn=admin,dc=example,dc=com
+
+
+# SSL options
+ssl start_tls
+ssl on
+tls_reqcert allow
+tls_cacertfile /etc/ssl/certs/ca-certificates.crt
+
+# The search scope.
+scope sub
+
+# Filters
+
+filter  passwd  (&(objectClass=user)(objectClass=person)(!(objectClass=computer)))
+filter  group   (|(objectClass=group)(objectClass=person))
+filter  shadow  (&(objectClass=user)(!(objectClass=machine)))
+
+# Attribute mappings
+map     passwd  uid                sAMAccountName
+map     passwd  uidNumber          objectSid:{{ ldap_sid }}
+
+map     passwd  gecos              "$sn $givenName ($sAMAccountName)"
+map     passwd  gidNumber          objectSid:{{ ldap_sid }}
+map     passwd  homeDirectory      "/home/SIPCMIETRU/$sAMAccountName"
+map     passwd  loginShell         "/bin/bash"
+
+map     group   gidNumber          objectSid:{{ ldap_sid }}
+map     shadow  uid                sAMAccountName
+map     shadow  shadowLastChange   pwdLastSet

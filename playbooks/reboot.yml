@@ -1,0 +1,9 @@
+---
+- name: Reboot machines
+  hosts: all
+  become: yes
+  tasks:
+
+  - name: Rebooting...
+    shell: shutdown -r -f +1 "Ansible reboots machines in 1 minute!!! "
+
