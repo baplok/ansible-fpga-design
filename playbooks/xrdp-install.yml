@@ -1,0 +1,30 @@
+---
+- name: Install xrdp (Linux RDP server)
+  hosts: all
+  tasks:
+
+#  - name: Unzip script installing XRDP
+#    become: yes
+#    unarchive: 
+#      remote_src: yes
+#      src: https://www.c-nergy.be/downloads/xrdp-installer-1.1.zip
+#      dest: /tmp
+#      mode: a+rx
+
+  - name: Copy modified script
+    become: yes
+    template:
+      src: xrdp-installer-1.1.sh
+      dest: /tmp/xrdp-installer-1.1.sh
+      mode: a+rx
+
+  - name: Run script installing XRDP
+    become: yes
+    shell: /tmp/xrdp-installer-1.1.sh -s -l
+    args:
+      chdir: /tmp
+      creates:
+        - /etc/xrdp/xrdp.ini
+
+
+
