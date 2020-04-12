@@ -1,0 +1,40 @@
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Ensure NFS common is installed.
+      apt:
+        name: nfs-common
+        state: installed
+        update_cache: yes
+
+#    - name: Ansible check directory.
+#      stat:
+#        path: /opt/Xilinx
+#        register: opt_Xilinx
+
+#    - name: "echo if directory already existed"
+#      debug:
+#        msg: "the /opt/Xilinx directory is already existed"
+#      when: opt_Xilinx.stat.exists
+
+#    - name: Create mountable dir
+#      file: 
+#        path: /opt/Xilinx
+#        state: directory
+#        mode: '0755'
+#        owner: root
+#        group: root
+#      when: opt_Xilinx.stat.exists == false
+
+    - name: Set mountpoints
+#      mount: name=/opt/Xilinx src= xilinx.sipc.miet.ru:/opt/Xilinx fstype=nfs opts=ro,defaults dump=0 passno=2 state=mounted
+      mount: 
+        name: /opt/Xilinx 
+        src: teacher4231b.sipc.miet.ru:/opt/Xilinx
+        fstype: nfs
+        opts: ro,defaults
+        dump: '0'
+        passno: '2'
+        state: mounted
+
