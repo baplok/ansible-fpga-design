@@ -9,4 +9,6 @@
       file: path=/opt/Xilinx state=directory mode=755 owner=root group=root
 
     - name: set mountpoints
-      mount: name=/opt/Xilinx src=xilinx.sipc.miet.ru:/opt/Xilinx fstype=nfs opts=ro,defaults dump=0 passno=2 state=mounted
+#      mount: name=/opt/Xilinx src=xilinx.sipc.miet.ru:/opt/Xilinx fstype=nfs opts=ro,defaults dump=0 passno=2 state=mounted
+      mount: name=/opt/Xilinx src=teacher4231b.sipc.miet.ru:/opt/cads/Xilinx fstype=nfs opts=ro,defaults dump=0 passno=2 state=mounted
+
