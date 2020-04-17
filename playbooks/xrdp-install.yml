@@ -1,0 +1,48 @@
+---
+- name: Install xrdp (Linux RDP server)
+  hosts: all
+  tasks:
+
+#  - name: Unzip script installing XRDP
+#    become: yes
+#    unarchive: 
+#      remote_src: yes
+#      src: https://www.c-nergy.be/downloads/xrdp-installer-1.1.zip
+#      dest: /tmp
+#      mode: a+rx
+
+  - name: Copy modified script
+    become: yes
+    template:
+      src: xrdp-installer-1.1.sh
+      dest: /tmp/xrdp-installer-1.1.sh
+      mode: a+rx
+
+  - name: Run script installing XRDP
+    become: yes
+    shell: /tmp/xrdp-installer-1.1.sh -l
+    args:
+      chdir: /tmp
+      creates:
+        - /etc/xrdp/xrdp.ini
+
+
+
+  - name: Correct startwm.sh(1) to fix desktop issue 
+    become: yes
+    replace:
+      dest: /etc/xrdp/startwm.sh
+      regexp: "^{{ item.comment_line | regex_escape() }}"
+      replace: "#{{ item.comment_line }}"
+    with_items:
+      - { comment_line: 'test -x /etc/X11/Xsession && exec /etc/X11/Xsession' }
+      - { comment_line: 'exec /bin/sh /etc/X11/Xsession' }
+
+  - name: Correct startwm.sh(2) to fix desktop issue
+    become: yes
+    lineinfile:
+      dest: /etc/xrdp/startwm.sh   
+      regexp: '^#exec.*'
+      line: '/usr/bin/mate-session'
+      backup: yes
+  

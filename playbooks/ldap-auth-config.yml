@@ -1,0 +1,76 @@
+---
+- name: Configure LDAP authentication on linux
+  hosts: all
+  become: yes
+
+  tasks:
+
+  - name: Install LDAP tools
+    apt:
+      name: "{{ item }}"
+      state: latest
+      install_recommends: yes
+      update_cache: yes
+    with_items:
+      - ldap-utils
+      - libpam-ldapd
+      - libnss-ldapd
+      - nslcd
+      - nscd
+
+  - name: Configure nslcd.conf from template
+    template:
+      src: nslcd.conf.j2
+      dest: /etc/nslcd.conf
+      owner: root
+      group: root
+      mode: '0640'
+
+  - name: Update nsswitch.conf to support LDAP
+    replace:
+      path: /etc/nsswitch.conf
+      regexp: '^(passwd.*)(?<!ldap)$'
+      replace: '\1 ldap'
+
+  - name: Update nsswitch.conf to support LDAP
+    replace:
+      path: /etc/nsswitch.conf
+      regexp: '^(group.*)(?<!ldap)$'
+      replace: '\1 ldap'
+
+  - name: Update nsswitch.conf to support LDAP
+    replace:
+      path: /etc/nsswitch.conf
+      regexp: '^(shadow.*)(?<!ldap)$'
+      replace: '\1 ldap'
+
+
+  - name: Update common.session to create homedir per each new logged in ldap user
+    lineinfile:
+      path: /etc/pam.d/common-session
+      insertafter: EOF
+      line: 'session optional        pam_mkhomedir.so skel=/etc/skel umask=077'
+
+
+  - name: Update lightdm.conf to allow arbitrary username to login
+    blockinfile:
+      path: /etc/lightdm/lightdm.conf
+      create: yes
+      owner: root
+      group: root
+      mode: '0644'
+      block: |
+          [SeatDefaults]
+          greeter-show-manual-login=true
+
+
+  - name: Restart service nscld...
+    service:
+      name: nslcd
+      state: restarted
+
+  - name: Restart service nscd...
+    service:
+      name: nscd
+      state: restarted
+

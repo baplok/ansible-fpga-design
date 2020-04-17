@@ -1,0 +1,10 @@
+- hosts: all
+  become: yes
+
+  tasks:
+
+
+  - name: Unmount a mounted volume
+    mount:
+      path: /opt/Xilinx
+      state: unmounted

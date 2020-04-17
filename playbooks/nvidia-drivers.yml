@@ -11,6 +11,4 @@
       install_recommends: yes
       update_cache: yes
 
-  - name: Unconditionally reboot the machine with all defaults
-    reboot:
 

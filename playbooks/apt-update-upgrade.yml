@@ -1,0 +1,14 @@
+---
+- name: Apt update and upgrade
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Upgrade all packages to the latest version
+    apt:
+      name: "*"
+      state: latest
+      update_cache: yes
+      force_apt_get: yes
+      force: yes
+

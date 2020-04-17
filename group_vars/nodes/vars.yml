@@ -7,6 +7,11 @@ proxy_username               : "{{ vault_proxy_username }}"
 proxy_password               : "{{ vault_proxy_password }}"
 proxy_env                    : "http://{{ proxy_username }}:{{ proxy_password }}@proxy.miet.ru:8080"
 
+ldap_base_dn                 : "ou=MIET,dc=sipc,dc=miet,dc=ru"
+ldap_sid                     : "S-1-5-21-3263783268-1060043553-2980701376"
+ldap_user_bind_dn            : "cn={{ vault_proxy_username }},{{ ldap_base_dn }}"
+ldap_pass_bind_dn            : "{{ vault_proxy_password }}"
+
 student_username             : student
 student_password             : "{{ vault_student_password | password_hash('sha512') }}"
 

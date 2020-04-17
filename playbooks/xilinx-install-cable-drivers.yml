@@ -1,0 +1,45 @@
+---
+- name: Install Xilinx cable drivers...
+  hosts: all
+  become: yes
+  tasks:
+
+  - name: Install required debs...
+    become: yes
+    apt:
+      pkg:
+        - libxm4
+        - gitk
+        - git-gui
+        - libusb-dev
+        - build-essential
+        - libc6-dev-i386
+        - fxload
+        - libftdi-dev
+      state: latest
+      install_recommends: yes
+      update_cache: yes
+
+  - name: Install cable drivers from installed Xilinx Vivado 2017.4 ...
+    become: yes
+    shell: 
+       ./install_drivers
+       ./setup_pcusb
+    args:
+      chdir: /opt/Xilinx/SDK/2017.4/data/xicom/cable_drivers/lin64/install_script/install_drivers
+
+  - name: Update udev config...
+    become: yes
+    shell: 
+#        sed -i -e 's/MODE=/MODE:=/g' 52-xilinx*.rules
+        udevadm control --reload
+    args:
+      chdir:  /etc/udev/rules.d
+
+  - name: Install precompiled lib
+    become: yes
+    shell: ./setup_pcusb /opt/Xilinx/14.7/ISE_DS/ISE/
+    args:
+      chdir: /opt/Xilinx/usb-driver
+
+
