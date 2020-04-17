@@ -1,0 +1,44 @@
+---
+- name: Apt update and upgrade
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Install some usefull common software
+    apt:
+      pkg: 
+        - htop
+        - mc
+        - rdesktop
+        - virtualbox
+        - atom4
+        - atril
+        - texlive-full
+        - texlive-lang-cyrillic
+        - texlive-lang-english
+        - texstudio
+        - lyx
+        - gimp
+        - geany
+        - geany-plugin-*
+        - pinta
+        - shutter
+        - flatpak
+        - snap
+      state: latest
+      install_recommends: yes
+      update_cache: yes
+
+
+#  - name: Install from snap
+#    snap:
+#      name: drawio
+
+
+  - name: Remove some buggy packages
+    apt:
+      name:
+        - bluez 
+        - blueman
+      state: absent
+
