@@ -1,5 +1,7 @@
 
-# Usage
+# Installation
+
+Download latest ansible version.
 
 Edit server(s) list, by modifying `hosts` file:
 
@@ -25,3 +27,19 @@ vault_proxy_password    : proxy-password
 vault_student_password  : student-password
 ```
 
+# Usage
+
+
+Test connection using `ping.yml`:
+
+```
+ansible-playbook playbooks/ping.yml
+```
+
+Configure proxy, apt, necessary packages:
+
+```
+ansible-playbook playbooks/sources.yml
+```
+
+Run any other available notebook (e.g. `octave.yml`)
