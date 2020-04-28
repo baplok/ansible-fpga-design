@@ -1,0 +1,50 @@
+---
+- name: Set of tasks to configure default behavior of MATE desktop
+  hosts: all
+  become: yes
+
+  tasks:
+
+#  - name: Install LDAP tools
+#    apt:
+#      name: "{{ item }}"
+#      state: latest
+#      install_recommends: yes
+#      update_cache: yes
+#    with_items:
+#      - ldap-utils
+#      - libpam-ldapd
+#      - libnss-ldapd
+#      - nslcd
+#      - nscd
+
+  - name: Disable shutdown,sleep from MATE menu
+    template:
+      src: 50-noshutdown.pkla
+      dest: /etc/polkit-1/localauthority/50-local.d
+      owner: root
+      group: root
+      mode: '0640'
+
+#  - name: Update nsswitch.conf to support LDAP
+#    replace:
+#      path: /etc/nsswitch.conf
+#      regexp: '^(passwd.*)(?<!ldap)$'
+#      replace: '\1 ldap'
+
+#  - name: Update lightdm.conf to allow arbitrary username to login
+#    blockinfile:
+#      path: /etc/lightdm/lightdm.conf
+#      create: yes
+#      owner: root
+#      group: root
+#      mode: '0644'
+#      block: |
+#          [SeatDefaults]
+#          greeter-show-manual-login=true
+
+  - name: Restart service nscd...
+    service:
+      name: polkit
+      state: restarted
+

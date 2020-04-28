@@ -1,0 +1,18 @@
+## https://superuser.com/questions/354678/what-is-the-correct-way-to-prevent-non-root-users-from-issuing-shutdowns-or-rebo
+## https://www.linux.org.ru/forum/general/14709882
+
+[Disallow shutdown]
+Identity=unix-user:*
+Action=org.freedesktop.login1.halt;org.freedesktop.login1.halt-multiple-sessions;org.freedesktop.login1.hibernate;org.freedesktop.login1.hibernate-multiple-sessions;org.freedesktop.login1.power-off;org.freedesktop.login1.power-off-multiple-sessions;org.freedesktop.login1.suspend;org.freedesktop.login1.suspend-multiple-sessions;
+ResultAny=no
+ResultInactive=no
+ResultActive=no
+
+
+#[Only root allow shutdown]
+#Identity=unix-group:admin
+#Action=org.freedesktop.login1.halt;org.freedesktop.login1.halt-multiple-session$
+#ResultAny=auth_admin
+#ResultInactive=auth_admin
+#ResultActive=auth_admin
+
