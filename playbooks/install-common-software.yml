@@ -8,6 +8,10 @@
     apt:
       pkg: 
         - htop
+        - curl
+        - git
+        - cmake
+        - neovim
         - mc
         - rdesktop
         - virtualbox

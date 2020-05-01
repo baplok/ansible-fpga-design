@@ -1,0 +1,32 @@
+---
+- name: install Brave browser from the https method driver for apt
+  hosts: all
+  become: true
+  tasks:
+    - name: install prequsites
+      apt:
+        name: apt-transport-https
+        state: present
+
+    - name: add the apt key
+      apt_key:
+        url: https://brave-browser-apt-release.s3.brave.com/brave-core.asc
+        state: present
+
+    - name: add the apt repository
+      apt_repository:
+        repo: deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ bionic main
+        update_cache: yes
+        state: present
+
+    - name: install Brave from repo
+      apt:
+        name: brave-browser
+        state: latest
+
+    - name: Make brave default browser
+      alternatives:
+        name: gnome-www-browser
+        path: /usr/bin/brave-browser
+
+#ansible update-alternatives --config gnome-www-browser      

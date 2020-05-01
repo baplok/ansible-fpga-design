@@ -34,22 +34,5 @@
       name: "*"
       state: latest
       update_cache: yes
-
-  - name: Install linux tools
-    apt:
-      name: "{{ item }}"
-      state: latest
-      install_recommends: yes
-      update_cache: yes
-    with_items:
-      - htop
-      - neovim
-      - curl
-      - git
-      - cmake
-
-  - name: Create student user
-    user:
-      name: "{{ student_username }}"
-      password: "{{ student_password }}"
+      force_apt_get: True
 
