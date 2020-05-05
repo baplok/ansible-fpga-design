@@ -1,0 +1,23 @@
+---
+- name: Configura languages on PCs
+  hosts: all
+  become: yes
+
+  tasks:
+
+  - name: Ensure a locale exists
+    locale_gen:
+      name: en_US.UTF-8
+      state: present
+
+  - name: Ensure a locale exists
+    locale_gen:
+      name: ru_RU.UTF-8
+      state: present
+
+  - name: Copy default locale from templates
+    template:
+      src: etc-default-locale
+      dest: /etc/default/locale
+      mode: 644
+
