@@ -1,0 +1,43 @@
+# Mount local Windows NTFS disk D: 'DATA'
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Ensure ntfs-3g common is installed.
+      apt:
+        name: ntfs-3g
+        state: present
+        update_cache: yes
+
+    - name: Create mountable dir
+      file: 
+        path: /media/win-data-disk
+        state: directory
+        mode: '0755'
+        owner: root
+        group: root
+
+    - name: Get windows disk DATA path (could be different partition number)
+      ignore_errors: yes
+      shell: fdisk -l /dev/sda | grep 'Microsoft basic data' | sed  's/^\(\/dev\/sda[0-9]*\).*$/\1/'
+      register: dev_sda_path
+
+#    - name: Read device information (always use unit when probing)
+#      parted: device=/dev/sda unit=MiB
+#      register: dev_sda_path
+
+    - name: "Ansible | Print a variable if defined"
+      debug:
+#        msg: "The found path is {{ dev_sda_path.stdout | regex_replace('^\\(\\/dev\\/sda[0-9]*\\)', '\\1')  }}"
+        msg: "The found path is {{ dev_sda_path.stdout }}"
+#      when: dev_sda_path is defined
+
+    - name: Set mountpoint
+      mount: 
+        name: /media/win-data-disk
+        src: "{{ dev_sda_path | regex_replace('^\\(\\/dev\\/sda[0-9]*\\).*$', '\\1')  }}"
+        fstype: ntfs
+        opts: rw,defaults
+        state: mounted
+      when: dev_sda_path is defined
+
