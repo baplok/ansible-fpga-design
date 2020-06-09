@@ -9,6 +9,11 @@
         state: present
         update_cache: yes
 
+    - name: Ansible check directory exists example.
+      stat:
+        path: /media/win-data-disk
+      register: mount_dir_info
+
     - name: Create mountable dir
       file: 
         path: /media/win-data-disk
@@ -16,6 +21,7 @@
         mode: '0755'
         owner: root
         group: root
+      when: mount_dir_info.stat.exists == false
 
     - name: Get windows disk DATA path (could be different partition number)
       ignore_errors: yes
@@ -35,7 +41,7 @@
     - name: Set mountpoint
       mount: 
         name: /media/win-data-disk
-        src: "{{ dev_sda_path | regex_replace('^\\(\\/dev\\/sda[0-9]*\\).*$', '\\1')  }}"
+        src: "{{ dev_sda_path.stdout }}"
         fstype: ntfs
         opts: rw,defaults
         state: mounted
