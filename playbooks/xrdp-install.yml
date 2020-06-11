@@ -7,26 +7,31 @@
 #    become: yes
 #    unarchive: 
 #      remote_src: yes
-#      src: https://www.c-nergy.be/downloads/xrdp-installer-1.1.zip
+#      src: https://www.c-nergy.be/downloads/xrdp-installer-1.2.zip
 #      dest: /tmp
 #      mode: a+rx
 
   - name: Copy modified script
     become: yes
     template:
-      src: xrdp-installer-1.1.sh
-      dest: /tmp/xrdp-installer-1.1.sh
+      src: xrdp-installer-1.2.sh
+      dest: /tmp/xrdp-installer-1.2.sh
       mode: a+rx
 
   - name: Run script installing XRDP
     become: yes
-    shell: /tmp/xrdp-installer-1.1.sh -l
+    shell: /tmp/xrdp-installer-1.2.sh -l -s
+    register: xrdp_install_script_output
     args:
       chdir: /tmp
-      creates:
-        - /etc/xrdp/xrdp.ini
+#      creates:
+#        - /etc/xrdp/xrdp.ini
+    
 
-
+  - name: Debug Print a variable if defined
+    debug:
+#        msg: "The found path is {{ dev_sda_path.stdout | regex_replace('^\\(\\/dev\\/sda[0-9]*\\)', '\\1')  }}"
+      msg: "{{ xrdp_install_script_output.stdout }}"
 
   - name: Correct startwm.sh(1) to fix desktop issue 
     become: yes
