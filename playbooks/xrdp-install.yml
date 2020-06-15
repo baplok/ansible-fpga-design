@@ -18,48 +18,46 @@
       dest: /tmp/xrdp-installer-1.2.sh
       mode: a+rx
 
+  - name: Run script to remove previous installation XRDP
+    become: yes
+    shell: /tmp/xrdp-installer-1.2.sh -r
+    register: xrdp_remove_script_output
+    args:
+      chdir: /tmp
+
+  - name: Debug Print a variable xrdp uninstall
+    debug:
+      msg: "{{ xrdp_remove_script_output.stdout }}"
+
+  - name: Delete /etc/xrdp folder for clean install
+    become: yes
+    file:
+      state: absent
+      path: /etc/xrdp/
+
   - name: Run script installing XRDP
     become: yes
-    shell: /tmp/xrdp-installer-1.2.sh -l -s
+    shell: /tmp/xrdp-installer-1.2.sh -c -l -s
     register: xrdp_install_script_output
     args:
       chdir: /tmp
-#      creates:
-#        - /etc/xrdp/xrdp.ini
+      creates:
+        - /etc/xrdp/xrdp.ini
     
 
-  - name: Debug Print a variable if defined
+  - name: Debug Print a variable xrdp install
     debug:
 #        msg: "The found path is {{ dev_sda_path.stdout | regex_replace('^\\(\\/dev\\/sda[0-9]*\\)', '\\1')  }}"
       msg: "{{ xrdp_install_script_output.stdout }}"
 
   - name: Correct startwm.sh(1) to fix desktop issue 
     become: yes
-    replace:
-      dest: /etc/xrdp/startwm.sh
-      regexp: "^{{ item.comment_line | regex_escape() }}"
-      replace: "#{{ item.comment_line }}"
-    with_items:
-      - { comment_line: 'test -x /etc/X11/Xsession && exec /etc/X11/Xsession' }
-      - { comment_line: 'exec /bin/sh /etc/X11/Xsession' }
-
-  - name: remove duplicate lines starting mate-session
-    become: yes
-    lineinfile:
-      path: /etc/xrdp/startwm.sh
-      # String to Search
-      regexp: "^{{ item.comment_line | regex_escape() }}"
-      # State is set to Absent to remove if the Searching Line is found
-      state: absent
+    template:
       backup: yes
-    with_items:
-      - { comment_line: '/usr/bin/mate-session' }
-
-  - name: Add only single line to the end of file
-    become: yes
-    lineinfile:
+      src: startwm.sh
       dest: /etc/xrdp/startwm.sh
-      state: present
-      line: '/usr/bin/mate-session'
-      backup: yes
-  
+      mode: '755'
+      
+
+
+
