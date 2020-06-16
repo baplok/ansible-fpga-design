@@ -29,6 +29,7 @@
         - shutter
         - flatpak
         - snap
+        - xserver-xorg-input-all
       state: latest
       install_recommends: yes
       update_cache: yes
