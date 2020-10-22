@@ -7,5 +7,5 @@
   - name: Select windows to next boot in grub menu...
     shell: grub-reboot 2
   - name: Rebooting...
-    shell: shutdown -r -f -t 5
+    shell: shutdown -r -f 5 "This machine is rebooting to Windows in 5 minutes!!! Please save all your data and logoff!"
 

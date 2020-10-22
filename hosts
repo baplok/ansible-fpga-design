@@ -1,9 +1,9 @@
 [nodes]
 
 st4231b-01 ansible_host=172.20.42.42
-st4231b-02 ansible_host=172.20.42.40
+st4231b-02 ansible_host=172.20.42.41
 st4231b-03 ansible_host=172.20.42.57
-st4231b-04 ansible_host=172.20.42.26
+st4231b-04 ansible_host=172.20.42.145
 st4231b-05 ansible_host=172.20.42.13
 st4231b-06 ansible_host=172.20.42.51
 st4231b-07 ansible_host=172.20.42.79
@@ -21,14 +21,13 @@ st4231b-18 ansible_host=172.20.42.52
 st4231b-19 ansible_host=172.20.42.71
 st4231b-20 ansible_host=172.20.42.60
 st4231b-21 ansible_host=172.20.42.68
-st4231b-22 ansible_host=172.20.42.69
 st4231b-23 ansible_host=172.20.42.21
 st4231b-24 ansible_host=172.20.42.70
 st4231b-25 ansible_host=172.20.42.162
 st4231b-26 ansible_host=172.20.42.72
 st4231b-27 ansible_host=172.20.42.61
 st4231b-28 ansible_host=172.20.42.82
-st4231b-29 ansible_host=172.20.42.63
+st4231b-29 ansible_host=172.20.42.181
 st4231b-30 ansible_host=172.20.42.66
-teacher4231b ansible_host=172.20.42.76
+teacher4231b ansible_host=172.20.42.165
 

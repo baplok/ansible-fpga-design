@@ -1,0 +1,6 @@
+---
+# install role before by issuing the command: ansible-galaxy install gantsign.atom
+- name: install atom.io text editor from galaxy
+  hosts: all
+  roles:
+    - role: gantsign.atom
