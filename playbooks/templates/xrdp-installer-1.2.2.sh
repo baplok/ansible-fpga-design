@@ -613,11 +613,11 @@ else
 	/bin/echo -e "\e[1;31m   !  Run script a standard user account (no sudo). When needed  !\e[0m"
 	/bin/echo -e "\e[1;31m   !  script will be prompted for password during execution      !\e[0m"
 	/bin/echo -e "\e[1;31m   !                                                             !\e[0m"
-	/bin/echo -e "\e[1;31m   !  Exiting Script - No Install Performed !!!                  !\e[0m"
+#	/bin/echo -e "\e[1;31m   !  Exiting Script - No Install Performed !!!                  !\e[0m"
 	/bin/echo -e "\e[1;31m   !-------------------------------------------------------------!\e[0m"
 	echo
 	#sh_credits
-	exit
+#	exit
 fi
 
 #---------------------------------------------------#
