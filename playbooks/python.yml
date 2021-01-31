@@ -7,6 +7,15 @@
   - name: Install pip
     apt: name=python3-pip state=latest install_recommends=yes update_cache=yes
 
+  - name: install specific version of qt5 (error free)
+    pip:
+      name: pyqt5
+      version: 5.14.0
+      executable: pip3
+    pip: 
+      name: pysdr
+      executable: pip3
+
   - name: install python packages
     pip:
       name:
@@ -15,6 +24,22 @@
       - pandas
       - scipy
       - jupyterlab
+      - bokeh
+      - jupyter-bokeh
+      - ipywidgets-bokeh
+      - bokeh-plot
+      - ipympl
+      - animatplot
+      - pandas-bokeh
+      state: latest
+      executable: pip3
+
+
+  - name: install DSP, SDR, PHY simulation python packages
+    pip:
+      name:
+      - pyfda
+      - pyphysim
       state: latest
       executable: pip3
 
