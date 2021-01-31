@@ -14,13 +14,13 @@
   - name: Copy modified script
     become: yes
     template:
-      src: xrdp-installer-1.2.sh
-      dest: /tmp/xrdp-installer-1.2.sh
+      src: xrdp-installer-1.2.2.sh
+      dest: /tmp/xrdp-installer-1.2.2.sh
       mode: a+rx
 
   - name: Run script to remove previous installation XRDP
     become: yes
-    shell: /tmp/xrdp-installer-1.2.sh -r
+    shell: /tmp/xrdp-installer-1.2.2.sh -r
     register: xrdp_remove_script_output
     args:
       chdir: /tmp
@@ -37,7 +37,7 @@
 
   - name: Run script installing XRDP
     become: yes
-    shell: /tmp/xrdp-installer-1.2.sh -c -l -s
+    shell: /tmp/xrdp-installer-1.2.2.sh -c -l -s
     register: xrdp_install_script_output
     args:
       chdir: /tmp

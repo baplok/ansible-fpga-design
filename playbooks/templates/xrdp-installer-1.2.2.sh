@@ -1,13 +1,19 @@
 #!/bin/bash
 #####################################################################################################
-# Script_Name : xrdp-installer-1.2.sh
-# Description : Perform xRDP installation on Ubuntu 16.04,18.04,19.04,19.10 and perform
+# Script_Name : xrdp-installer-1.2.2.sh
+# Description : Perform xRDP installation on Ubuntu 16.04,18.04,20.4,20.10 and perform
 #               additional post configuration to improve end user experience
-# Date : November 2019
+# Date : December 2020
 # written by : Griffon
 # WebSite :http://www.c-nergy.be - http://www.c-nergy.be/blog
-# Version : 1.2
-# History : 1.2   - Adding Support to Ubuntu 20.04 + Removed support for Ubuntu 19.04
+# Version : 1.2.2 
+# History : 1.2.2 - Changing Ubuntu repository from be.archive.ubuntu.com to archive.ubuntu.com
+#                 - Bug Fixing - /etc/xrdp/xrdp-installer-check.log not deleted when remove option   
+#                   selected in the script - Force Deletion (Thanks to Hiero for this input)     
+#                 - Bug Fixing - Grab automatically xrdp/xorgxrdp package version to avoid     
+#                   issues when upgrade operation performed (Thanks to Hiero for this input)     
+#         : 1.2.1 - Adding Support to Ubuntu 20.10 + Removed support for Ubuntu 19.10
+#           1.2   - Adding Support to Ubuntu 20.04 + Removed support for Ubuntu 19.04
 #                 - Stricter Check for HWE Package (thanks to Andrej Gantvorg)
 #                 - Changed code in checking where to copy image for login screen customization 
 #                 - Fixed Bug checking SSL group membership 
@@ -131,7 +137,6 @@ echo
 Dwnload=$(xdg-user-dir DOWNLOAD)
 cd $Dwnload
 
-
 ## -- Download the xrdp latest files
 echo
 /bin/echo -e "\e[1;32m   !---------------------------------------------!\e[0m"
@@ -154,12 +159,16 @@ git clone https://github.com/neutrinolabs/xorgxrdp.git
 compile_source() { 
 echo
 /bin/echo -e "\e[1;33m   !---------------------------------------------!\e[0m"
-/bin/echo -e "\e[1;33m   !   Compile xRDP packages .......Proceeding.  ! \e[0m"
+/bin/echo -e "\e[1;33m   !   Compile xRDP packages .......Proceeding.  !\e[0m"
 /bin/echo -e "\e[1;33m   !---------------------------------------------!\e[0m"
 echo
 
 #cd ~/Downloads/xrdp
 cd $Dwnload/xrdp
+
+#Get the release version automatically
+pkgver=$(git describe  --abbrev=0 --tags  | cut -dv -f2)
+
 
 sudo ./bootstrap
 sudo ./configure --enable-fuse --enable-jpeg --enable-rfxcodec
@@ -178,17 +187,20 @@ echo
 /bin/echo -e "\e[1;31m   !---------------------------------------------!\e[0m"
 exit
 fi
-sudo checkinstall --pkgname=xrdp --pkgversion=0.9.13 --pkgrelease=1 --default
+sudo checkinstall --pkgname=xrdp --pkgversion=$pkgver --pkgrelease=1 --default
 
 #xorgxrdp package compilation
 echo
 /bin/echo -e "\e[1;33m   !---------------------------------------------!\e[0m"
-/bin/echo -e "\e[1;33m   !   Compile xorgxrdp packages....Proceeding.  ! \e[0m"
+/bin/echo -e "\e[1;33m   !   Compile xorgxrdp packages....Proceeding.  !\e[0m"
 /bin/echo -e "\e[1;33m   !---------------------------------------------!\e[0m"
 echo
 
 #cd ~/Downloads/xorgxrdp 
 cd $Dwnload/xorgxrdp
+
+#Get the release version automatically
+pkgver=$(git describe  --abbrev=0 --tags  | cut -dv -f2)
 
 sudo ./bootstrap 
 sudo ./configure 
@@ -208,7 +220,7 @@ echo
 /bin/echo -e "\e[1;31m   !---------------------------------------------!\e[0m"
 exit
 fi
-sudo checkinstall --pkgname=xorgxrdp --pkgversion=0.2.13 --pkgrelease=1 --default
+sudo checkinstall --pkgname=xorgxrdp --pkgversion=1:$pkgver --pkgrelease=1 --default
 }
 
 #---------------------------------------------------#
@@ -217,7 +229,7 @@ sudo checkinstall --pkgname=xorgxrdp --pkgversion=0.2.13 --pkgrelease=1 --defaul
 enable_service() {
 echo
 /bin/echo -e "\e[1;33m   !---------------------------------------------!\e[0m"
-/bin/echo -e "\e[1;33m   !   Creating xRDP services.......Proceeding.  ! \e[0m"
+/bin/echo -e "\e[1;33m   !   Creating xRDP services.......Proceeding.  !\e[0m"
 /bin/echo -e "\e[1;33m   !---------------------------------------------!\e[0m"
 echo 
 sudo systemctl daemon-reload
@@ -279,7 +291,7 @@ ResultActive=yes
 EOF
 
 #Specific Versions
-if [[ "$version" = *"Ubuntu 19.10"* ]] || [[ "$version" = *"Ubuntu 20.04"* ]] ;
+if [[ "$version" = *"Ubuntu 20.10"* ]] || [[ "$version" = *"Ubuntu 20.04"* ]] ;
 then
 sudo bash -c "cat >/etc/polkit-1/localauthority/50-local.d/46-allow-update-repo.pkla" <<EOF
 [Allow Package Management all Users]
@@ -336,11 +348,11 @@ echo
 echo
 
 # Step 1 - Enable Source Code Repository
-sudo apt-add-repository -s 'deb http://be.archive.ubuntu.com/ubuntu/ '$codename' main restricted'
-sudo apt-add-repository -s 'deb http://be.archive.ubuntu.com/ubuntu/ '$codename' restricted universe main multiverse'
-sudo apt-add-repository -s 'deb http://be.archive.ubuntu.com/ubuntu/ '$codename'-updates restricted universe main multiverse'
-sudo apt-add-repository -s 'deb http://be.archive.ubuntu.com/ubuntu/ '$codename'-backports main restricted universe multiverse'
-sudo apt-add-repository -s 'deb http://be.archive.ubuntu.com/ubuntu/ '$codename'-security main restricted universe main multiverse'
+sudo apt-add-repository -s 'deb http://archive.ubuntu.com/ubuntu/ '$codename' main restricted'
+sudo apt-add-repository -s 'deb http://archive.ubuntu.com/ubuntu/ '$codename' restricted universe main multiverse'
+sudo apt-add-repository -s 'deb http://archive.ubuntu.com/ubuntu/ '$codename'-updates restricted universe main multiverse'
+sudo apt-add-repository -s 'deb http://archive.ubuntu.com/ubuntu/ '$codename'-backports main restricted universe multiverse'
+sudo apt-add-repository -s 'deb http://archive.ubuntu.com/ubuntu/ '$codename'-security main restricted universe main multiverse'
 sudo apt-get update
 
 # Step 2 - Install Some PreReqs
@@ -462,6 +474,10 @@ echo
 /bin/echo -e "\e[1;33m   ! Removing xRDP Packages...                   !\e[0m" 
 /bin/echo -e "\e[1;33m   !---------------------------------------------!\e[0m" 
 echo 
+
+#remove the xrdplog file created by the script 
+sudo rm /etc/xrdp/xrdp-installer-check.log
+
 #remove xrdp package
 sudo systemctl stop xrdp
 sudo systemctl disable xrdp
@@ -482,8 +498,9 @@ echo
 /bin/echo -e "\e[1;36m   ! If Sound option selected, shutdown your machine completely     !\e[0m"
 /bin/echo -e "\e[1;36m   ! start it again to have sound working as expected               !\e[0m"
 /bin/echo -e "\e[1;36m   !                                                                !\e[0m"
-/bin/echo -e "\e[1;36m   ! Credits : Written by Griffon - April 2020                      !\e[0m"
-/bin/echo -e "\e[1;36m   !           www.c-nergy.be -xrdp-installer-v1.2.sh - ver 1.2     !\e[0m"
+/bin/echo -e "\e[1;36m   ! Credits : Written by Griffon - Dec. 2020                       !\e[0m"
+/bin/echo -e "\e[1;36m   !           www.c-nergy.be -xrdp-installer-v$ScriptVer.sh             !\e[0m"
+/bin/echo -e "\e[1;36m   !           ver $ScriptVer                                            !\e[0m"
 /bin/echo -e "\e[1;36m   !----------------------------------------------------------------!\e[0m"
 echo
 }
@@ -523,15 +540,17 @@ enable_service
 # Script Version information Displayed              #
 #---------------------------------------------------#
 
+#--Automating Script versioning 
+ScriptVer="1.2.2"
 echo
-/bin/echo -e "\e[1;36m   !-------------------------------------------------------------!\e[0m"
-/bin/echo -e "\e[1;36m   !   xrdp-installer-1.2 Script                                 !\e[0m"
-/bin/echo -e "\e[1;36m   !   Support U16.04/18.04/19.10/20.04                          !\e[0m"
-/bin/echo -e "\e[1;36m   !   Written by Griffon - April 2020 - www.c-nergy.be          !\e[0m"
-/bin/echo -e "\e[1;36m   !                                                             !\e[0m"
-/bin/echo -e "\e[1;36m   !   For Help and Syntax, type ./xrdp-installer-1.2.sh -h      !\e[0m"
-/bin/echo -e "\e[1;36m   !                                                             !\e[0m"
-/bin/echo -e "\e[1;36m   !-------------------------------------------------------------!\e[0m"
+/bin/echo -e "\e[1;36m   !---------------------------------------------------------------!\e[0m"
+/bin/echo -e "\e[1;36m   !   xrdp-installer-$ScriptVer Script                                 !\e[0m"
+/bin/echo -e "\e[1;36m   !   Support U16.04/18.04/19.10/20.04/20.10                      !\e[0m"
+/bin/echo -e "\e[1;36m   !   Written by Griffon - Nov 2020 - www.c-nergy.be              !\e[0m"
+/bin/echo -e "\e[1;36m   !                                                               !\e[0m"
+/bin/echo -e "\e[1;36m   !   For Help and Syntax, type ./xrdp-installer-$ScriptVer.sh -h      !\e[0m"
+/bin/echo -e "\e[1;36m   !                                                               !\e[0m"
+/bin/echo -e "\e[1;36m   !---------------------------------------------------------------!\e[0m"
 echo
 
 #----------------------------------------------------------#
@@ -545,15 +564,15 @@ do
                 echo "Usage Syntax and Examples"
                 echo
                 echo " --custom or -c           custom xRDP install (compilation from sources)"
-				echo " --loginscreen or -l      customize xRDP login screen"
+		echo " --loginscreen or -l      customize xRDP login screen"
                 echo " --remove or -r           removing xRDP packages"
                 echo " --sound or -s            enable sound redirection in xRDP"
                 echo
                 echo "example                                                      "
                 echo     
-                echo " ./xrdp-installer-1.0.sh -c -s  custom install with sound redirection"
-                echo " ./xrdp-installer-1.0.sh -l     standard install with custom login screen"
-                echo " ./xrdp-installer-1.0.sh        standard install no additional features"
+                echo " ./xrdp-installer-$ScriptVer.sh -c -s  custom install with sound redirection"
+                echo " ./xrdp-installer-$ScriptVer.sh -l     standard install with custom login screen"
+                echo " ./xrdp-installer-$ScriptVer.sh        standard install no additional features"
                 echo
                 exit
     fi
@@ -590,7 +609,7 @@ if [[ $EUID -ne 0 ]]; then
 else
 	echo
 	/bin/echo -e "\e[1;31m   !-------------------------------------------------------------!\e[0m"
-	/bin/echo -e "\e[1;31m   !  Script launched with sudo command. Script will run...      !\e[0m"
+	/bin/echo -e "\e[1;31m   !  Script launched with sudo command. Script will not run...  !\e[0m"
 	/bin/echo -e "\e[1;31m   !  Run script a standard user account (no sudo). When needed  !\e[0m"
 	/bin/echo -e "\e[1;31m   !  script will be prompted for password during execution      !\e[0m"
 	/bin/echo -e "\e[1;31m   !                                                             !\e[0m"
@@ -598,7 +617,7 @@ else
 	/bin/echo -e "\e[1;31m   !-------------------------------------------------------------!\e[0m"
 	echo
 	#sh_credits
-	#exit
+#	exit
 fi
 
 #---------------------------------------------------#
@@ -622,7 +641,7 @@ elif [[ "$version" = *"Ubuntu 20.04"* ]];
 then
 	/bin/echo -e "\e[1;32m       |-| Ubuntu Version : $version\e[0m"
 	echo
-elif [[ "$version" = *"Ubuntu 19.10"* ]];
+elif [[ "$version" = *"Ubuntu 20.10"* ]];
 then
 	/bin/echo -e "\e[1;32m       |-| Ubuntu Version : $version\e[0m"
 	echo
@@ -630,7 +649,7 @@ else
 	/bin/echo -e "\e[1;31m  !--------------------------------------------------------------!\e[0m"
 	/bin/echo -e "\e[1;31m  ! Your system is not running a supported version               !\e[0m"
 	/bin/echo -e "\e[1;31m  ! The script has been tested only on the following versions    !\e[0m"
-	/bin/echo -e "\e[1;31m  ! U16.04.x/18.04.x/19.10/20.04.x                               !\e[0m"
+	/bin/echo -e "\e[1;31m  ! U16.04.x/18.04.x/19.10/20.0X                                 !\e[0m"
 	/bin/echo -e "\e[1;31m  ! The script is exiting...                                     !\e[0m"             
 	/bin/echo -e "\e[1;31m  !--------------------------------------------------------------!\e[0m"
 	echo
