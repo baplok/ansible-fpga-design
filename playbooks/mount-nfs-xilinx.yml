@@ -28,10 +28,10 @@
 #      when: opt_Xilinx.stat.exists == false
 
     - name: Set mountpoints
-#      mount: name=/opt/Xilinx src= xilinx.sipc.miet.ru:/opt/Xilinx fstype=nfs opts=ro,defaults dump=0 passno=2 state=mounted
+#      mount: name=/opt/Xilinx src= srv.tcs.miet.ru:/opt/Xilinx fstype=nfs opts=ro,defaults dump=0 passno=2 state=mounted
       mount: 
         name: /opt/Xilinx 
-        src: teacher4231b.sipc.miet.ru:/opt/Xilinx
+        src: srv.tcs.miet.ru:/opt/Xilinx
         fstype: nfs
         opts: ro,defaults
         dump: '0'
