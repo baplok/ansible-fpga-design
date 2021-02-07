@@ -1,0 +1,79 @@
+# Install UHD, RFNOC, GNURADIO by pybombs
+# https://kb.ettus.com/Getting_Started_with_RFNoC_Development
+# https://files.ettus.com/manual/page_build_guide.html
+# https://github.com/gnuradio/pybombs/issues/495
+
+
+---
+- name: Getting_Started_with_RFNoC_Development
+  hosts: all
+  become: yes
+
+
+  tasks:
+  - name: Remove obsolete uhd packages
+    apt:
+      pkg:
+        - libuhd*
+        - uhd*
+      state: absent
+      autoremove: yes
+
+
+  - name: Install pip and neccessary apt packages
+    apt: 
+      pkg:
+        - libboost-all-dev
+        - libusb-1.0-0-dev
+        - doxygen
+        - git
+        - python3-docutils
+        - python3-mako
+        - python3-numpy
+        - python3-requests
+        - python3-ruamel.yaml
+        - python3-setuptools
+        - python3-setuptools 
+        - python3-dev
+        - python3-pip
+        - python3-aiohttp-mako
+        - python-cheetah
+        - python-numpy
+        - cmake
+        - build-essential
+      state: latest
+      install_recommends: yes
+      update_cache: yes
+
+
+  - name: install pybombs pip packages
+    pip:
+      name:
+        - pybombs
+      state: latest
+      executable: pip3
+  - name: run pybombs install
+    shell: |
+      python3 -m pip install git+https://github.com/gnuradio/pybombs.git
+      pybombs -y prefix init /opt/rfnoc-pybombs-prefix -a rfnoc-prefix
+      pybombs -y -p rfnoc-prefix recipes add ettus git+https://github.com/EttusResearch/ettus-pybombs.git
+      pybombs -y -p rfnoc-prefix recipes add gr-recipes git+https://github.com/gnuradio/gr-recipes.git
+
+  - name: Correct rfnoc recipe to UHD4.0+GNURADIO3.8
+    template:
+      backup: yes
+      src: rfnoc.lwr
+      dest: /opt/rfnoc-pybombs-prefix/.pybombs/recipes/ettus
+      mode: '755'
+
+  - name: build and install RFNOC+UHD+GNURADIO
+    shell:  pybombs -y -p rfnoc-prefix install rfnoc
+
+  - name: Check installation and download images
+    shell: |
+      cd ~/rfnoc
+      source ./setup_env.sh
+
+      uhd_config_info --version
+      uhd_images_downloader
+
