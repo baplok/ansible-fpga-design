@@ -7,15 +7,6 @@
   - name: Install pip
     apt: name=python3-pip state=latest install_recommends=yes update_cache=yes
 
-  - name: install specific version of qt5 (error free)
-    pip:
-      name: pyqt5
-      version: 5.14.0
-      executable: pip3
-    pip: 
-      name: pysdr
-      executable: pip3
-
   - name: install python packages
     pip:
       name:
@@ -31,6 +22,7 @@
       - ipympl
       - animatplot
       - pandas-bokeh
+      - pybombs
       state: latest
       executable: pip3
 
@@ -43,3 +35,9 @@
       state: latest
       executable: pip3
 
+  - name: install specific version of qt5 (error free)
+    pip:
+      name: 
+         - pyqt5==5.14.0
+         - pysdr
+      executable: pip3
