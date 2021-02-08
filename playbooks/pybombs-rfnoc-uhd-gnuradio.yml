@@ -67,11 +67,11 @@
       mode: '755'
 
   - name: build and install RFNOC+UHD+GNURADIO
-    shell:  pybombs -y -p rfnoc-prefix install rfnoc
+    shell:  pybombs -y -p init rfnoc-prefix -R rfnoc
 
   - name: Check installation and download FPGA images
     shell: |
-      source  /opt/rfnoc-pybombs-prefix/setup_env.sh
+      source /opt/rfnoc-pybombs-prefix/setup_env.sh
       uhd_config_info --version
       uhd_images_downloader
 
