@@ -62,6 +62,8 @@
       block: |
           [SeatDefaults]
           greeter-show-manual-login=true
+          greater-hide-users=true
+
 
 
   - name: Restart service nscld...

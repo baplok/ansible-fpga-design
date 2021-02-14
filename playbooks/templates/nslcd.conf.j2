@@ -36,9 +36,19 @@ scope sub
 
 # Filters
 
-filter  passwd  (&(objectClass=user)(objectClass=person)(!(objectClass=computer)))
-filter  group   (|(objectClass=group)(objectClass=person))
-filter  shadow  (&(objectClass=user)(!(objectClass=machine)))
+#   --- OLD FILTERS ---
+#filter  passwd  (&(objectClass=user)(objectClass=person)(!(objectClass=computer)))
+#filter  group   (|(objectClass=group)(objectClass=person))
+#filter  shadow  (&(objectClass=user)(!(objectClass=machine)))
+
+#   --- NEW FILTERS ---
+# select objects person which is member of certain groups and exact accounts
+filter  passwd  (|(&(objectCategory=Person)(memberOf=CN=TKS,OU=TKS,OU=Staff,OU=MIET,DC=sipc,DC=miet,DC=ru))  (&(objectCategory=Person)(memberOf=CN=ASP,OU=ASP,OU=MIET,DC=sipc,DC=miet,DC=ru))  (&(objectCategory=Person)(memberOf=CN=IKT,OU=IKT,OU=Students,OU=MIET,DC=sipc,DC=miet,DC=ru))  (cn=1001947) (cn=8183990) )
+filter  shadow  (|(&(objectCategory=Person)(memberOf=CN=TKS,OU=TKS,OU=Staff,OU=MIET,DC=sipc,DC=miet,DC=ru))  (&(objectCategory=Person)(memberOf=CN=ASP,OU=ASP,OU=MIET,DC=sipc,DC=miet,DC=ru))  (&(objectCategory=Person)(memberOf=CN=IKT,OU=IKT,OU=Students,OU=MIET,DC=sipc,DC=miet,DC=ru))  (cn=1001947) (cn=8183990) )
+
+#nonempty groups only
+filter  group   (&(objectCategory=group)(member=*))
+
 
 # Attribute mappings
 map     passwd  uid                sAMAccountName
