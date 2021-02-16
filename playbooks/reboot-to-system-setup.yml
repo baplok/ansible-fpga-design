@@ -1,0 +1,11 @@
+---
+- name: Reboot machines to windows system
+  hosts: all
+  become: yes
+  tasks:
+
+  - name: Selects -Sytem setup- to next boot in grub menu...
+    shell: grub-reboot "System setup"
+  - name: Rebooting...
+    shell: shutdown -r -f 1 "This machine is rebooting to System BIOS setup in 1 minutes!!! Please save all your data and logoff!"
+
