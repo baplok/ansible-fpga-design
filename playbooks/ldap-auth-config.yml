@@ -62,7 +62,7 @@
       block: |
           [SeatDefaults]
           greeter-show-manual-login=true
-          greater-hide-users=true
+          greeter-hide-users=true
 
 
 
