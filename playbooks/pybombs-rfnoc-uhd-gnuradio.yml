@@ -74,4 +74,5 @@
       source /opt/rfnoc-pybombs-prefix/setup_env.sh
       uhd_config_info --version
       uhd_images_downloader
-
+    args:
+      executable: /bin/bash
