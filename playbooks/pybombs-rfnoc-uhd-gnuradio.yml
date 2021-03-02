@@ -76,3 +76,8 @@
       uhd_images_downloader
     args:
       executable: /bin/bash
+
+  - name: add IP 192.168.10.XXX
+    shell: ip addr add "192.168.10.$(ip addr show eno1 | grep "inet 172"| sed "s/^.*inet 172\.20\.42\.\([0-9]*\).*/\1/")/24" brd + dev eno1
+    args:
+      executable: /bin/bash
