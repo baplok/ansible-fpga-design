@@ -3,7 +3,7 @@ inherit: prefix
 config:
     packages:
         uhd:
-            gitbranch: UHD-4.0
+            gitbranch: UHD-3.15.LTS
             forcebuild: True
             vars:
               config_opt: " -DENABLE_RFNOC=ON "
@@ -11,7 +11,7 @@ config:
             gitbranch: maint-3.8
             forcebuild: True
         gr-ettus:
-            gitbranch: maint-3.8-uhd4.0
+            gitbranch: maint-3.8
             forcebuild: True
         uhd-fpga:
             gitbranch: master

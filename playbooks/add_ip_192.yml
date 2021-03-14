@@ -1,0 +1,12 @@
+# Add ip for 192.168.10.x to connetct to USRP 
+
+---
+- name: add
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: add IP 192.168.10.XXX
+    shell: ip addr add "192.168.10.$(ip addr show eno1 | grep "inet 172"| sed "s/^.*inet 172\.20\.42\.\([0-9]*\).*/\1/")/24" brd + dev eno1
+    args:
+      executable: /bin/bash
